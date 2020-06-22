@@ -2,12 +2,16 @@
 
 namespace Tests\Browser;
 
+use App\Concert;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
 class ViewConcertListingTest extends DuskTestCase
 {
+    use DatabaseMigrations;
+
     /**
      * @test
      */
@@ -26,7 +30,18 @@ class ViewConcertListingTest extends DuskTestCase
             'additional_information' => 'For tickets, call (555) 555-5555.',
         ]);
 
-        $this->browse(function (Browser $browser) {
-            $browser->visit('/concerts/' .$concert->id)
-                    ->assertSee('Laravel');
+        $this->browse(function (Browser $browser) use ($concert) {
+            $browser->visit('/concerts/'.$concert->id)
+                    ->assertSee('The Red Chord')
+                    ->assertSee('with Animosity and Lethargy')
+                    ->assertSee('December 13, 2016')
+                    ->assertSee('8:00pm')
+                    ->assertSee('32.50')
+                    ->assertSee('The Mosh Pit')
+                    ->assertSee('123 Example Lane')
+                    ->assertSee('Laraville, ON 17916')
+                    ->assertSee('For tickets, call (555) 555-5555.');
+        });
+
+    }
 }
