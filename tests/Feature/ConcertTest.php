@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 class ConcertTest extends TestCase
 {
-    use RefreshDatabase;
+//    use RefreshDatabase;
 
     /**
      * A basic feature test example.
@@ -19,13 +19,38 @@ class ConcertTest extends TestCase
      */
     public function can_get_formatted_date()
     {
-        $concert = factory(Concert::class)->create([
+        $concert = factory(Concert::class)->make([
             'date' => Carbon::parse('2016-12-01 8:00pm')
         ]);
 
+        $this->assertEquals('December 1, 2016', $concert->formatted_date);
+    }
 
-        $date = $concert->formatted_date;
+    /**
+     * A basic feature test example.
+     * @test
+     * @return void
+     */
+    public function can_get_formatted_start_time()
+    {
+        $concert = factory(Concert::class)->make([
+            'date' => Carbon::parse('2016-12-01 17:00:00')
+        ]);
 
-        $this->assertEquals('December 1, 2016', $date);
+        $this->assertEquals('5:00pm', $concert->formatted_start_time);
+    }
+
+    /**
+     * A basic feature test example.
+     * @test
+     * @return void
+     */
+    public function can_get_ticket_price_in_dollars()
+    {
+        $concert = factory(Concert::class)->make([
+           'ticket_price' => 6750
+        ]);
+
+        $this->assertEquals('67.50', $concert->ticket_price_in_dollars);
     }
 }
