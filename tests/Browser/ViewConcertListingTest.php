@@ -17,7 +17,7 @@ class ViewConcertListingTest extends DuskTestCase
      */
     public function user_can_view_a_concert_listing()
     {
-        $concert = Concert::create([
+            $concert = Concert::create([
             'title' => 'The Red Chord',
             'subtitle' => 'with Animosity and Lethargy',
             'date' => Carbon::parse('December 13, 2016 8:00pm'),
