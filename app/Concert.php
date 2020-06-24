@@ -28,4 +28,5 @@ class Concert extends Model
     {
         return $query->whereNotNull('published_at');
     }
+
 }
