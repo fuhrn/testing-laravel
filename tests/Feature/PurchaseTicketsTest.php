@@ -20,6 +20,17 @@ class PurchaseTicketsTest extends TestCase
         $this->app->instance(PaymentGateway::class, $this->paymentGateway);
     }
 
+    public function orderTickets($concert, $params)
+    {
+        return $this->postJson('/concerts/'.$concert->id.'/orders', $params);
+    }
+
+    public function assertValidationError($response, $field)
+    {
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors([$field]);
+    }
+
     /**
      * A basic feature test example.
      * @test
@@ -32,11 +43,12 @@ class PurchaseTicketsTest extends TestCase
 
         $concert = factory(Concert::class)->create(['ticket_price' => 3250]);
 
-        $response = $this->postJson('/concerts/'.$concert->id.'/orders', [
+        $response = $this->orderTickets($concert, [
             'email' => 'john@example.com',
             'ticket_quantity' => 3,
             'payment_token' => $this->paymentGateway->getValidTestToken(),
         ]);
+
 
         $response->assertStatus(201);
 
@@ -63,6 +75,7 @@ class PurchaseTicketsTest extends TestCase
     }
 
     /**
+    /**
      * A basic feature test example.
      * @test
      * @return void
@@ -74,16 +87,95 @@ class PurchaseTicketsTest extends TestCase
         $concert = factory(Concert::class)->create();
 
 
-        $response = $this->postJson('/concerts/'.$concert->id.'/orders', [
+        $response = $this->orderTickets($concert, [
 //            'email' => 'john@example.com',
             'ticket_quantity' => 3,
             'payment_token' => $this->paymentGateway->getValidTestToken(),
         ]);
 
-        $response->assertStatus(422)
-                 ->assertJsonMissing([
-                     'john@example.com'
-                    ]
-                 );
+        $this->assertValidationError($response, 'email');
+    }
+
+    /**
+     * A basic feature test example.
+     * @test
+     * @return void
+     */
+    public function email_must_be_valid_to_purchase_tickets()
+    {
+//        $this->withoutExceptionHandling();
+
+        $concert = factory(Concert::class)->create();
+
+        $response = $this->orderTickets($concert, [
+            'email' => 'not_a_valid_email',
+            'ticket_quantity' => 3,
+            'payment_token' => $this->paymentGateway->getValidTestToken(),
+        ]);
+
+        $this->assertValidationError($response, 'email');
+    }
+
+    /**
+     *
+     *//**
+     * A basic feature test example.
+     * @test
+     * @return void
+     */
+    public function ticket_quantity_is_required_to_purchase_tickets()
+    {
+//        $this->withoutExceptionHandling();
+
+        $concert = factory(Concert::class)->create();
+
+
+        $response = $this->orderTickets($concert, [
+            'email' => 'not_a_valid_email',
+//            'ticket_quantity' => 3,
+            'payment_token' => $this->paymentGateway->getValidTestToken(),
+        ]);
+
+        $this->assertValidationError($response, 'ticket_quantity');
+    }
+
+    /**
+     * A basic feature test example.
+     * @test
+     * @return void
+     */
+    public function ticket_quantity_must_be_at_least_1_to_purchase_ticket()
+    {
+//        $this->withoutExceptionHandling();
+
+        $concert = factory(Concert::class)->create();
+
+        $response = $this->orderTickets($concert, [
+            'email' => 'not_a_valid_email',
+            'ticket_quantity' => 0,
+            'payment_token' => $this->paymentGateway->getValidTestToken(),
+        ]);
+
+        $this->assertValidationError($response, 'ticket_quantity');
+    }
+
+    /**
+     * A basic feature test example.
+     * @test
+     * @return void
+     */
+    public function payment_token_is_required()
+    {
+//        $this->withoutExceptionHandling();
+
+        $concert = factory(Concert::class)->create();
+
+        $response = $this->orderTickets($concert, [
+            'email' => 'not_a_valid_email',
+            'ticket_quantity' => 0,
+//            'payment_token' => $this->paymentGateway->getValidTestToken(),
+        ]);
+
+        $this->assertValidationError($response, 'payment_token');
     }
 }
