@@ -40,6 +40,20 @@ class PurchaseTicketsTest extends TestCase
         $order = $concert->orders()->where('email', 'john@example.com')->first();
         $this->assertNotNull($order);
         $this->assertEquals(3, $order->tickets()->count());
+    }
 
+    /**
+     * A basic feature test example.
+     * @test
+     * @return void
+     */
+    public function can_order_concert_tickets()
+    {
+        $concert = factory(Concert::class)->create();
+
+        $order = $concert->orderTickets('jane@example.com', 3);
+
+        $this->assertEquals('jane@example.com', $order->email);
+        $this->assertEquals(3, $order->tickets()->count());
     }
 }
