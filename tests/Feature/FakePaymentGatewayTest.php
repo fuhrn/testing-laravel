@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Billing\PaymentFailedException;
 use App\Billing\FakePaymentGateway;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -21,5 +22,22 @@ class FakePaymentGatewayTest extends TestCase
         $paymentGateway->charge(2500, $paymentGateway->getValidTestToken());
 
         $this->assertEquals(2500, $paymentGateway->totalCharges());
+    }
+
+    /**
+     * A basic feature test example.
+     * @test
+     * @return void
+     */
+    public function charges_with_an_invalid_payment_token_fail()
+    {
+        try{
+            $paymentGateway = new FakePaymentGateway();
+            $paymentGateway->charge(2500, 'invalid-payment-token');
+        } catch (PaymentFailedException $e) {
+            return;
+        }
+
+        $this->fail();
     }
 }
