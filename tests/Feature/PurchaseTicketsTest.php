@@ -81,6 +81,7 @@ class PurchaseTicketsTest extends TestCase
 
     /**
      * @test
+     * @group
      */
     public function an_order_is_not_created_if_payment_fails()
     {
@@ -88,7 +89,7 @@ class PurchaseTicketsTest extends TestCase
 
         $concert = factory(Concert::class)->states('published')->create(['ticket_price' => 3250]);
         $concert->addTickets(3);
-        
+
         $response = $this->orderTickets($concert, [
             'email' => 'john@example.com',
             'ticket_quantity' => 3,
@@ -107,7 +108,8 @@ class PurchaseTicketsTest extends TestCase
     public function can_order_concert_tickets()
     {
         $concert = factory(Concert::class)->states('published')->create();
-
+        $concert->addTickets(3);
+        
         $order = $concert->orderTickets('jane@example.com', 3);
 
         $this->assertEquals('jane@example.com', $order->email);
