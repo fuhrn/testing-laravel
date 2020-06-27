@@ -113,7 +113,7 @@ class PurchaseTicketsTest extends TestCase
 
     /**
      * @test
-     * @group failing
+     * @group
      */
     public function cannot_purchase_more_tickets_than_remain()
     {
@@ -126,7 +126,7 @@ class PurchaseTicketsTest extends TestCase
             'payment_token' => 'invalid-payment-token',
         ]);
 
-        $this->assertResponseStatus(422);
+        $response->assertStatus(422);
         $order = $concert->orders()->where('email', 'john@example.com')->first();
         $this->assertNull($order);
         $this->assertEquals(0, $this->paymentGateway->totalCharges());
