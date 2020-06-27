@@ -25,6 +25,16 @@ class Concert extends Model
         return number_format($this->ticket_price / 100, 2);
     }
 
+    public function hasOrderFor($customerEmail)
+    {
+        return $this->orders()->where('email', $customerEmail)->count() > 0;
+    }
+
+    public function ordersFor($customerEmail)
+    {
+        return $this->orders()->where('email', $customerEmail)->get();
+    }
+
     public function scopePublished($query)
     {
         return $query->whereNotNull('published_at');
@@ -67,7 +77,7 @@ class Concert extends Model
         foreach (range(1, $quantity) as $i) {
             $this->tickets()->create([]);
         }
-
+        return $this;
     }
 
     public function ticketsRemaining()
