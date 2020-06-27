@@ -36,12 +36,12 @@ class PurchaseTicketsTest extends TestCase
      * @test
      * @return void
      */
-    public function customer_can_purchase_concert_tickets()
+    public function customer_can_purchase_tickets_to_a_published_concert()
     {
         $this->withoutExceptionHandling();
 
 
-        $concert = factory(Concert::class)->create(['ticket_price' => 3250]);
+        $concert = factory(Concert::class)->states('published')->create(['ticket_price' => 3250]);
 
         $response = $this->orderTickets($concert, [
             'email' => 'john@example.com',
@@ -59,6 +59,28 @@ class PurchaseTicketsTest extends TestCase
     }
 
     /**
+     * @group failed
+     * @test
+     * @return void
+     */
+    public function cannot_purchase_tickets_to_an_unpublished_concert()
+    {
+//        $this->withoutExceptionHandling();
+
+        $concert = factory(Concert::class)->states('unpublished')->create();
+
+        $response = $this->orderTickets($concert, [
+            'email' => 'john@example.com',
+            'ticket_quantity' => 3,
+            'payment_token' => $this->paymentGateway->getValidTestToken(),
+        ]);
+
+        $response->assertStatus(404);
+        $this->assertEquals(0, $concert->orders()->count());
+        $this->assertEquals(0, $this->paymentGateway->totalCharges());
+    }
+
+    /**
      * @group
      * @test
      * @return void
@@ -67,7 +89,7 @@ class PurchaseTicketsTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $concert = factory(Concert::class)->create(['ticket_price' => 3250]);
+        $concert = factory(Concert::class)->states('published')->create(['ticket_price' => 3250]);
 
         $response = $this->orderTickets($concert, [
             'email' => 'john@example.com',
@@ -88,7 +110,7 @@ class PurchaseTicketsTest extends TestCase
      */
     public function can_order_concert_tickets()
     {
-        $concert = factory(Concert::class)->create();
+        $concert = factory(Concert::class)->states('published')->create();
 
         $order = $concert->orderTickets('jane@example.com', 3);
 
@@ -106,7 +128,7 @@ class PurchaseTicketsTest extends TestCase
     {
 //        $this->withoutExceptionHandling();
 
-        $concert = factory(Concert::class)->create();
+        $concert = factory(Concert::class)->states('published')->create();
 
 
         $response = $this->orderTickets($concert, [
@@ -127,7 +149,7 @@ class PurchaseTicketsTest extends TestCase
     {
 //        $this->withoutExceptionHandling();
 
-        $concert = factory(Concert::class)->create();
+        $concert = factory(Concert::class)->states('published')->create();
 
         $response = $this->orderTickets($concert, [
             'email' => 'not_a_valid_email',
@@ -149,7 +171,7 @@ class PurchaseTicketsTest extends TestCase
     {
 //        $this->withoutExceptionHandling();
 
-        $concert = factory(Concert::class)->create();
+        $concert = factory(Concert::class)->states('published')->create();
 
 
         $response = $this->orderTickets($concert, [
@@ -170,7 +192,7 @@ class PurchaseTicketsTest extends TestCase
     {
 //        $this->withoutExceptionHandling();
 
-        $concert = factory(Concert::class)->create();
+        $concert = factory(Concert::class)->states('published')->create();
 
         $response = $this->orderTickets($concert, [
             'email' => 'not_a_valid_email',
@@ -190,7 +212,7 @@ class PurchaseTicketsTest extends TestCase
     {
 //        $this->withoutExceptionHandling();
 
-        $concert = factory(Concert::class)->create();
+        $concert = factory(Concert::class)->states('published')->create();
 
         $response = $this->orderTickets($concert, [
             'email' => 'not_a_valid_email',
