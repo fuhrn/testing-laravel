@@ -32,9 +32,7 @@ class PurchaseTicketsTest extends TestCase
     }
 
     /**
-     * A basic feature test example.
      * @test
-     * @return void
      */
     public function customer_can_purchase_tickets_to_a_published_concert()
     {
@@ -59,9 +57,7 @@ class PurchaseTicketsTest extends TestCase
     }
 
     /**
-     * @group failed
      * @test
-     * @return void
      */
     public function cannot_purchase_tickets_to_an_unpublished_concert()
     {
@@ -78,12 +74,11 @@ class PurchaseTicketsTest extends TestCase
         $response->assertStatus(404);
         $this->assertEquals(0, $concert->orders()->count());
         $this->assertEquals(0, $this->paymentGateway->totalCharges());
+        $this->assertEquals(50, $concert->ticketsRemaining());
     }
 
     /**
-     * @group
      * @test
-     * @return void
      */
     public function an_order_is_not_created_if_payment_fails()
     {
@@ -104,9 +99,7 @@ class PurchaseTicketsTest extends TestCase
 
 
     /**
-     * A basic feature test example.
      * @test
-     * @return void
      */
     public function can_order_concert_tickets()
     {
@@ -118,11 +111,31 @@ class PurchaseTicketsTest extends TestCase
         $this->assertEquals(3, $order->tickets()->count());
     }
 
+
     /**
-    /**
-     * A basic feature test example.
      * @test
-     * @return void
+     */
+    public function cannot_purchase_more_tickets_than_remain()
+    {
+        $concert = factory(Concert::class)->states('published')->create();
+        $concert->addTickets(50);
+
+        $response = $this->orderTickets($concert, [
+            'email' => 'john@example.com',
+            'ticket_quantity' => 51,
+            'payment_token' => 'invalid-payment-token',
+        ]);
+
+        $this->assertResponseStatus(422);
+        $order = $concert->orders()->where('email', 'john@example.com')->first();
+        $this->assertNull($order);
+        $this->assertEquals(0, $this->paymentGateway->totalCharges());
+    }
+
+
+    /**
+    /**
+     * @test
      */
     public function email_is_required_to_purchase_tickets()
     {
@@ -141,9 +154,7 @@ class PurchaseTicketsTest extends TestCase
     }
 
     /**
-     * A basic feature test example.
      * @test
-     * @return void
      */
     public function email_must_be_valid_to_purchase_tickets()
     {
@@ -163,9 +174,7 @@ class PurchaseTicketsTest extends TestCase
     /**
      *
      *//**
-     * A basic feature test example.
      * @test
-     * @return void
      */
     public function ticket_quantity_is_required_to_purchase_tickets()
     {
@@ -184,9 +193,7 @@ class PurchaseTicketsTest extends TestCase
     }
 
     /**
-     * A basic feature test example.
      * @test
-     * @return void
      */
     public function ticket_quantity_must_be_at_least_1_to_purchase_ticket()
     {
@@ -204,9 +211,7 @@ class PurchaseTicketsTest extends TestCase
     }
 
     /**
-     * A basic feature test example.
      * @test
-     * @return void
      */
     public function payment_token_is_required()
     {
@@ -222,4 +227,8 @@ class PurchaseTicketsTest extends TestCase
 
         $this->assertValidationError($response, 'payment_token');
     }
+
+
+
+
 }
