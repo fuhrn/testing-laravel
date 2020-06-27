@@ -109,7 +109,7 @@ class PurchaseTicketsTest extends TestCase
     {
         $concert = factory(Concert::class)->states('published')->create();
         $concert->addTickets(3);
-        
+
         $order = $concert->orderTickets('jane@example.com', 3);
 
         $this->assertEquals('jane@example.com', $order->email);
