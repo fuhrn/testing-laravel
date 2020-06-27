@@ -74,7 +74,6 @@ class PurchaseTicketsTest extends TestCase
         $response->assertStatus(404);
         $this->assertEquals(0, $concert->orders()->count());
         $this->assertEquals(0, $this->paymentGateway->totalCharges());
-        $this->assertEquals(50, $concert->ticketsRemaining());
     }
 
     /**
@@ -114,6 +113,7 @@ class PurchaseTicketsTest extends TestCase
 
     /**
      * @test
+     * @group failing
      */
     public function cannot_purchase_more_tickets_than_remain()
     {
@@ -130,6 +130,7 @@ class PurchaseTicketsTest extends TestCase
         $order = $concert->orders()->where('email', 'john@example.com')->first();
         $this->assertNull($order);
         $this->assertEquals(0, $this->paymentGateway->totalCharges());
+        $this->assertEquals(50, $concert->ticketsRemaining());
     }
 
 

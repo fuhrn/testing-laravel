@@ -13,9 +13,7 @@ class ConcertTest extends TestCase
     use RefreshDatabase;
 
     /**
-     * A basic feature test example.
      * @test
-     * @return void
      */
     public function can_get_formatted_date()
     {
@@ -27,9 +25,7 @@ class ConcertTest extends TestCase
     }
 
     /**
-     * A basic feature test example.
      * @test
-     * @return void
      */
     public function can_get_formatted_start_time()
     {
@@ -41,9 +37,7 @@ class ConcertTest extends TestCase
     }
 
     /**
-     * A basic feature test example.
      * @test
-     * @return void
      */
     public function can_get_ticket_price_in_dollars()
     {
@@ -55,9 +49,7 @@ class ConcertTest extends TestCase
     }
 
     /**
-     * A basic feature test example.
      * @test
-     * @return void
      */
     public function concerts_with_a_published_at_date_are_published()
     {
@@ -70,5 +62,50 @@ class ConcertTest extends TestCase
         $this->assertTrue($publishedConcerts->contains($publishedConcertA));
         $this->assertTrue($publishedConcerts->contains($publishedConcertB));
         $this->assertFalse($publishedConcerts->contains($unpublishedConcert));
+    }
+
+    /**
+     * @test
+     * @group
+     */
+    public function can_order_concert_tickets()
+    {
+        $concert = factory(Concert::class)->create();
+
+        $order = $concert->orderTickets('jane@example.com', 3);
+
+        $this->assertEquals('jane@example.com', $order->email);
+        $this->assertEquals(3, $order->tickets()->count());
+
+    }
+
+    /**
+     * @test
+     * @group
+     */
+    public function can_add_tickets()
+    {
+        $concert = factory(Concert::class)->create();
+
+        $concert->addTickets(50);
+
+        $this->assertEquals(50, $concert->ticketsRemaining());
+    }
+
+    /**
+     * @test
+     * @group 1
+     */
+    public function tickets_remaining_does_not_include_tickets_associated_with_an_order()
+    {
+        $concert = factory(Concert::class)->create();
+        $concert->addTickets(50);
+        $concert->orderTickets('jane@example.com', 30);
+
+        $this->assertEquals(20, $concert->ticketsRemaining());
+
+
+
+
     }
 }
