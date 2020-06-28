@@ -33,12 +33,7 @@ class ConcertOrdersController extends Controller
             // Charging the customer.
             $this->paymentGateway->charge(request('ticket_quantity') * $concert->ticket_price, request('payment_token'));
 
-            return response()->json([
-                'id' => 1,
-                'email' => 'john@example.com',
-                'ticket_quantity' => 3,
-                'amount' => 9750,
-            ], 201);
+            return response()->json($order, 201);
 
         } catch (PaymentFailedException $e) {
             $order->cancel();

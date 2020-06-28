@@ -9,6 +9,11 @@ class Order extends Model
 {
     protected $guarded = [];
 
+    public function concert()
+    {
+        return $this->belongsTo(Concert::class);
+    }
+
     public function tickets()
     {
         return $this->hasMany(Ticket::class);
@@ -26,6 +31,16 @@ class Order extends Model
         }
 
         $this->delete();
+    }
+
+    public function toArray()
+    {
+        return [
+            'email' => $this->email,
+            'ticket_quantity' => $this->ticketQuantity(),
+            'amount' => $this->ticketQuantity() * $this->concert->ticket_price,
+        ];
+
     }
 }
 
