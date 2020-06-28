@@ -32,6 +32,7 @@ class PurchaseTicketsTest extends TestCase
     }
 
     /**
+     * @group 1
      * @test
      */
     public function customer_can_purchase_tickets_to_a_published_concert()
@@ -49,10 +50,13 @@ class PurchaseTicketsTest extends TestCase
 
         $response->assertStatus(201);
 
-        $this->assertEquals(9750, $this->paymentGateway->totalCharges());
+        $response->assertJson([
+            'email' => 'john@example.com',
+            'ticket_quantity' => 3,
+            'amount' => 9750,
+        ]);
 
-//        $order = $concert->orders()->where('email', 'john@example.com')->first();
-//        $this->assertNotNull($order);
+        $this->assertEquals(9750, $this->paymentGateway->totalCharges());
 
         $this->assertTrue($concert->hasOrderFor('john@example.com'));
 
@@ -118,7 +122,7 @@ class PurchaseTicketsTest extends TestCase
 
     /**
      * @test
-     * @group 1
+     * @group
      */
     public function cannot_purchase_more_tickets_than_remain()
     {
