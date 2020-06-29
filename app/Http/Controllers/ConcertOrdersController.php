@@ -6,6 +6,7 @@ use App\Billing\PaymentFailedException;
 use App\Billing\PaymentGateway;
 use App\Concert;
 use App\Exceptions\NotEnoughTicketsException;
+use App\Order;
 use Illuminate\Http\Request;
 
 class ConcertOrdersController extends Controller
@@ -35,7 +36,7 @@ class ConcertOrdersController extends Controller
             $this->paymentGateway->charge(request('ticket_quantity') * $concert->ticket_price, request('payment_token'));
 
             // Creating the order for those tickets.
-            $order = $concert->createOrder(request('email'), $tickets);
+            $order = Order::forTickets($tickets, request('email'));
 
 
             return response()->json($order, 201);
