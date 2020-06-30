@@ -13,6 +13,11 @@ class PurchaseTicketsTest extends TestCase
 {
     use RefreshDatabase;
 
+    /**
+     * @var FakePaymentGateway
+     */
+    private $paymentGateway;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -84,7 +89,7 @@ class PurchaseTicketsTest extends TestCase
 
     /**
      * @test
-     * @group 1
+     * @group
      */
     public function cannot_purchase_tickets_another_customer_is_already_trying_to_purchase()
     {
