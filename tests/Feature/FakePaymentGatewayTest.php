@@ -25,7 +25,6 @@ class FakePaymentGatewayTest extends TestCase
     }
 
     /**
-     * A basic feature test example.
      * @test
      * @return void
      */
@@ -39,5 +38,25 @@ class FakePaymentGatewayTest extends TestCase
         }
 
         $this->fail();
+    }
+
+    /**
+     * @test
+     * @group 2
+     * @return void
+     */
+    public function running_a_hook_before_the_first_charge()
+    {
+        $paymentGateway = new FakePaymentGateway;
+        $callbackRan = false;
+
+        $paymentGateway->beforeFirstCharge(function ($paymentGateway) use (&$callbackRan) {
+            $callbackRan = true;
+            $this->assertEquals(0, $paymentGateway->totalCharges());
+        });
+
+        $paymentGateway->charge(2500, $paymentGateway->getValidTestToken());
+        $this->assertTrue($callbackRan);
+        $this->assertEquals(2500, $paymentGateway->totalCharges());
     }
 }
