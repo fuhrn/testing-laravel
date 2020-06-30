@@ -89,7 +89,7 @@ class PurchaseTicketsTest extends TestCase
 
     /**
      * @test
-     * @group
+     * @group 1
      */
     public function cannot_purchase_tickets_another_customer_is_already_trying_to_purchase()
     {

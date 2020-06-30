@@ -75,16 +75,14 @@ class Concert extends Model
         return $this->tickets()->available()->count();
     }
 
-    public function reservedTickets($quantity)
+    public function reserveTickets($quantity)
     {
-        return $this->findTickets($quantity);
+        return $this->findTickets($quantity)->each(function ($ticket) {
+            $ticket->reserve();
+        });
     }
 
-    /**
-     * @param $ticketQuantity
-     * @return mixed
-     * @throws NotEnoughTicketsException
-     */
+
     public function findTickets($quantity)
     {
         $tickets = $this->tickets()->available()->take($quantity)->get();
