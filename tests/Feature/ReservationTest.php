@@ -34,7 +34,7 @@ class ReservationTest extends TestCase
 
     /**
      * @test
-     * group 2
+     * group
      */
     public function reserved_tickets_are_released_when_a_reservation_is_cancelled()
     {

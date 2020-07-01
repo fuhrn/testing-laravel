@@ -133,7 +133,7 @@ class PurchaseTicketsTest extends TestCase
 
     /**
      * @test
-     * @group
+     * @group 2
      */
     public function an_order_is_not_created_if_payment_fails()
     {
