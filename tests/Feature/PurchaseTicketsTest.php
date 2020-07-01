@@ -17,16 +17,19 @@ class PurchaseTicketsTest extends TestCase
      * @var FakePaymentGateway
      */
     private $paymentGateway;
+    private $requestA;
 
     protected function setUp(): void
     {
         parent::setUp();
+        $this->requestA = $this->app['request'];
         $this->paymentGateway = new FakePaymentGateway();
         $this->app->instance(PaymentGateway::class, $this->paymentGateway);
     }
 
     public function orderTickets($concert, $params)
     {
+        $this->requestA = $this->app['request'];
         return $this->postJson('/concerts/'.$concert->id.'/orders', $params);
     }
 
@@ -95,16 +98,21 @@ class PurchaseTicketsTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $concert = factory(Concert::class)->states('unpublished')->create([
+        $concert = factory(Concert::class)->states('published')->create([
             'ticket_price' => 1200
         ])->addTickets(3);
 
         $this->paymentGateway->beforeFirstCharge(function ($paymentGateway) use ($concert) {
+
             $response = $this->orderTickets($concert, [
                 'email' => 'personB@example.com',
                 'ticket_quantity' => 1,
                 'payment_token' => $this->paymentGateway->getValidTestToken(),
             ]);
+
+// tengo que dejar aqui la instruccion de regenerar el request de personA, porque arriba en orderTickets es unreachable
+            $this->app['request'] = $this->requestA;
+
             $response->assertStatus(422);
             $this->assertFalse($concert->hasOrderfor('personB@example.com'));
             $this->assertEquals(0, $this->paymentGateway->totalCharges());
@@ -116,6 +124,7 @@ class PurchaseTicketsTest extends TestCase
             'payment_token' => $this->paymentGateway->getValidTestToken(),
         ]);
 
+//        dd($concert->orders()->first()->toArray());
         $this->assertEquals(3600, $this->paymentGateway->totalCharges());
         $this->assertTrue($concert->hasOrderFor('personA@example.com'));
         $this->assertEquals(3, $concert->ordersFor('personA@example.com')->first()->ticketQuantity());
@@ -273,8 +282,4 @@ class PurchaseTicketsTest extends TestCase
 
         $this->assertValidationError($response, 'payment_token');
     }
-
-
-
-
 }

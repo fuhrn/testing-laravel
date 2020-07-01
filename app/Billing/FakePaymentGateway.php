@@ -39,7 +39,6 @@ class FakePaymentGateway implements PaymentGateway
 
     public function beforeFirstCharge($callback)
     {
-//        dd($callback);
         $this->beforeFirstChargeCallback = $callback;
     }
 }

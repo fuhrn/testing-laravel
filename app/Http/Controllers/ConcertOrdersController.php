@@ -29,9 +29,9 @@ class ConcertOrdersController extends Controller
         ]);
 
         try {
-
-            // Find some tickets
+            // Find and reserve     some tickets
             $tickets =$concert->reserveTickets(request('ticket_quantity'));
+
             $reservation = new Reservation($tickets);
 
             // Charging the customer for the tickets
@@ -39,7 +39,6 @@ class ConcertOrdersController extends Controller
 
             // Creating the order for those tickets.
             $order = Order::forTickets($tickets, request('email'), $reservation->totalCost());
-
 
             return response()->json($order, 201);
 
