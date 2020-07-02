@@ -12,7 +12,7 @@ use Tests\TestCase;
 
 class ReservationTest extends TestCase
 {
-//    use RefreshDatabase;
+    use RefreshDatabase;
 
     /**
      * @test
@@ -93,5 +93,22 @@ class ReservationTest extends TestCase
         foreach($tickets as $ticket) {
             $ticket->shouldHaveReceived('release');
         }
+    }
+
+    /**
+     * @test
+     * group
+     */
+    public function completing_a_reservation()
+    {
+        $concert = factory(Concert::class)->create(['ticket_price' => 1200]);
+        $tickets = factory(Ticket::class, 3)->create(['concert_id' => $concert->id]);
+        $reservation = new Reservation($tickets, 'john@example.com');
+
+        $order = $reservation->complete();
+
+        $this->assertEquals('john@example.com', $order->email);
+        $this->assertEquals(3, $order->ticketQuantity());
+        $this->assertEquals(3600, $order->amount);
     }
 }
