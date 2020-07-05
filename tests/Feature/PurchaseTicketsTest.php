@@ -96,7 +96,7 @@ class PurchaseTicketsTest extends TestCase
      */
     public function cannot_purchase_tickets_another_customer_is_already_trying_to_purchase()
     {
-        $this->withoutExceptionHandling();
+//        $this->withoutExceptionHandling();
 
         $concert = factory(Concert::class)->states('published')->create([
             'ticket_price' => 1200
@@ -133,11 +133,11 @@ class PurchaseTicketsTest extends TestCase
 
     /**
      * @test
-     * @group 2
+     * @group
      */
     public function an_order_is_not_created_if_payment_fails()
     {
-        $this->withoutExceptionHandling();
+//        $this->withoutExceptionHandling();
 
         $concert = factory(Concert::class)->states('published')->create(['ticket_price' => 3250])->addTickets(3);
 
