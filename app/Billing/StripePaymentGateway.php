@@ -41,45 +41,35 @@ class StripePaymentGateway implements PaymentGateway
             ],
         ], ['api_key' => $this->apiKey])->id;
     }
+
+    public function newChargesDuring($callback)
+    {
+        $latestCharge = $this->lastCharge();
+        $callback($this);
+        return $this->newChargesSince($latestCharge)->pluck('amount');
+    }
+
+    private function lastCharge()
+    {
+        return $lastCharge = \Stripe\Charge::all(
+            ['limit' => 1],
+            ['api_key' => $this->apiKey]
+        )['data'][0];
+    }
+
+
+    private function newChargesSince($charge = null)
+    {
+        $newCharges = \Stripe\Charge::all(
+            [
+                'limit' => 1,
+                'ending_before' => $charge ? $charge->id : null,
+            ],
+            ['api_key' => $this->apiKey]
+        )['data'];
+
+        return collect($newCharges);
+    }
 }
 
-//class StripePaymentGateway implements PaymentGateway
-//{
-//    private $apiKey;
-//
-//    public function __construct($apiKey)
-//    {
-//        $this->apiKey = $apiKey;
-//    }
-//    public function charge($amount, $token)
-//    {
-//        dd([$this->apiKey]);
-//        (new \GuzzleHttp\Client)->post('https:://api.stripe.com/v1  /charges', [
-//            'headers' => [
-//                'Authorization' => "Bearer {$this->apiKey}",
-//            ],
-//            'form_params' => [
-//                'amount' => $amount,
-//                'source' => $token,
-//                'currency' => 'usd',
-//                ]
-//            ]);
 
-//        Http::withHeaders([
-//            'Authorization' => "Bearer {$this->apiKey}",
-//        ])->post('https:://api.stripe.com/v1/charges', [
-//            'amount' => $amount,
-//            'source' => $token,
-//            'currency' => 'usd',
-//        ]);
-//
-//    }
-//}
-
-//$response = Http::withHeaders([
-//    'Authorization' => "Bearer {$this->apiKey}",
-//    ])->post('https:://api.stripe.com/v1/charges', [
-//    'amount' => $amount,
-//    'source' => $token,
-//    'currency' => 'usd',
-//]);
