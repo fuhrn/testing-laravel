@@ -36,19 +36,27 @@ class StripePaymentGatewayTest extends TestCase
         )['data'];
     }
 
+    protected function getPaymentGateway()
+    {
+        return new StripePaymentGateway(config('services.stripe.secret'));
+    }
+
     /**
      * @test
      * @group 1
      */
     public function charges_with_a_valid_payment_token_are_successful()
     {
-        $paymentGateway = new StripePaymentGateway(config('services.stripe.secret'));
+        $paymentGateway = $this->getPaymentGateway();
+        $charge = $paymentGateway->lastCharge();
+
+        $newCharges = $paymentGateway->newChargesDuring(function () {
+            $paymentGateway->charge(2500, $paymentGateway->getValidTestToken());
+        });
 
 
-        $paymentGateway->charge(2500, $this->validToken());
-
-        $this->assertCount(1, $this->newCharges());
-        $this->assertEquals(2500, $this->lastCharge()->amount);
+        $this->assertCount(1, $newCharges);
+        $this->assertEquals(2500, $newCharges[0]->sum());
     }
 
     /**
