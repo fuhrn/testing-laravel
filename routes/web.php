@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('mockups/order', function() {
+    return view('orders.show');
+});
+
 Route::get('/', function () {
     return view('welcome');
 });

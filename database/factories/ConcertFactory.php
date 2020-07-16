@@ -14,6 +14,7 @@ $factory->define(Concert::class, function (Faker $faker) {
         'ticket_price' => 2000,
         'venue' => 'The Example Theatre',
         'venue_address' => '123 Example Lane',
+        'published_at' => Carbon::parse('-2 weeks'),
         'city' => 'Fakeville',
         'state' => 'ON',
         'zip' => '90210',
