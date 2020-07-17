@@ -5,8 +5,10 @@ namespace Tests\Feature;
 use App\Billing\FakePaymentGateway;
 use App\Billing\PaymentGateway;
 use App\Concert;
+use App\OrderConfirmationNumberGenerator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Mockery;
 use Tests\TestCase;
 
 class PurchaseTicketsTest extends TestCase
@@ -40,13 +42,17 @@ class PurchaseTicketsTest extends TestCase
     }
 
     /**
-     * @group
+     * @group 1
      * @test
      */
     public function customer_can_purchase_tickets_to_a_published_concert()
     {
         $this->withoutExceptionHandling();
 
+        $orderConfirmationNumberGenerator = Mockery::mock(OrderConfirmationNumberGenerator::class, [
+            'generate' => 'ORDERCONFIRMATION1234'
+        ]);
+        $this->app->instance(OrderConfirmationNumberGenerator::class, $orderConfirmationNumberGenerator);
 
         $concert = factory(Concert::class)->states('published')->create(['ticket_price' => 3250])->addTickets(3);
 
