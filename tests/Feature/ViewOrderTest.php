@@ -20,7 +20,9 @@ class ViewOrderTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $concert = factory(Concert::class)->create();
+        $concert = factory(Concert::class)->create([
+            'date' => 'Friday, July 31st, 2020 8:00pm'
+        ]);
 
         $order = factory(Order::class)->create([
             'confirmation_number' => 'ORDERCONFIRMATION1234',
@@ -47,11 +49,21 @@ class ViewOrderTest extends TestCase
         $response->assertViewHas('order', function ($viewOrder) use ($order) {
             return $order->id === $viewOrder->id;
         });
+
         $response->assertSee('ORDERCONFIRMATION1234');
         $response->assertSee('$85.00');
         $response->assertSee('**** **** **** 1881');
         $response->assertSee('TICKETCODE123');
         $response->assertSee('TICKETCODE456');
+        $response->assertSee('Example band');
+        $response->assertSee('with The Fake Openers');
+        $response->assertSee('The Example Theatre');
+        $response->assertSee('123 Example Lane');
+        $response->assertSee('Fakeville');
+        $response->assertSee('ON 90210');
+        $response->assertSee('somebody@example.com');
+
+        $response->assertSee('2020-07-31 20:00');
     }
 
 }
