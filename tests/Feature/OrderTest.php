@@ -52,7 +52,7 @@ class OrderTest extends TestCase
 
     /**
      * @test
-     * @group 1
+     * @group
      */
     public function retrieving_an_nonexistent_order_by_confirmation_number_throws_an_exception()
     {
