@@ -65,7 +65,7 @@ class RandomOrderConfirmationNumberGeneratorTest extends TestCase
         $confirmationNumbers = array_map(function ($i) use ($generator) {
             return $generator->generate();
         }, range(1, 100));
-        
+
         $this->assertCount(100, array_unique($confirmationNumbers));
     }
 }
