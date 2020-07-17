@@ -68,7 +68,7 @@ class OrderTest extends TestCase
 
     /**
      * @test
-     * @group 2
+     * @group
      */
     public function converting_to_an_array()
     {

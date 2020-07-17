@@ -42,7 +42,7 @@ class PurchaseTicketsTest extends TestCase
     }
 
     /**
-     * @group 1
+     * @group
      * @test
      */
     public function customer_can_purchase_tickets_to_a_published_concert()
@@ -235,8 +235,6 @@ class PurchaseTicketsTest extends TestCase
     }
 
     /**
-     *
-     *//**
      * @test
      */
     public function ticket_quantity_is_required_to_purchase_tickets()
