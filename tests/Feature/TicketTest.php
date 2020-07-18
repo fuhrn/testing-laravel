@@ -47,9 +47,11 @@ class TicketTest extends TestCase
      */
     public function a_ticket_can_be_claimed_for_an_order()
     {
+//        \Mockery::getConfiguration()->allowMockingNonExistentMethods(false);
+
         $order = factory(Order::class)->create();
         $ticket = factory(Ticket::class)->create(['code' => null]);
-        TicketCode::shouldReceive('generate')->andReturn('TICKETCODE1');
+        TicketCode::shouldReceive('generateFor')->with($ticket)->andReturn('TICKETCODE1');
 
         $ticket->claimFor($order);
 
