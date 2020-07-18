@@ -42,7 +42,7 @@ class PurchaseTicketsTest extends TestCase
     }
 
     /**
-     * @group
+     * @group 1
      * @test
      */
     public function customer_can_purchase_tickets_to_a_published_concert()

@@ -29,7 +29,7 @@ trait PaymentGatewayContractTests
 
     /**
      * @test
-     * @group 1
+     * @group
      */
     public function can_get_details_about_a_successful_charge()
     {

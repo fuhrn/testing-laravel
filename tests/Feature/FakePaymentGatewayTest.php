@@ -19,7 +19,7 @@ class FakePaymentGatewayTest extends TestCase
 
     /**
      * @test
-     * @group 3
+     * @group
      * @return void
      */
     public function running_a_hook_before_the_first_charge()
