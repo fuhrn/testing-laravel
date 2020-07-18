@@ -39,7 +39,8 @@ class ConcertOrdersController extends Controller
             // Creating the order for those tickets.
             $order = $reservation->complete($this->paymentGateway, request('payment_token'));
 
-            return response()->json($order, 201);
+//            return response()->json($order, 201);
+            return redirect()->route('order', ['confirmationNumber' =>$order->confirmation_number]);
 
         } catch (PaymentFailedException $e) {
             $reservation->cancel();
