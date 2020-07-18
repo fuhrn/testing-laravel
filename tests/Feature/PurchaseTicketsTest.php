@@ -159,22 +159,6 @@ class PurchaseTicketsTest extends TestCase
         $this->assertEquals(3, $concert->ticketsRemaining());
     }
 
-
-    /**
-     * @test
-     */
-    public function can_order_concert_tickets()
-    {
-        $concert = factory(Concert::class)->states('published')->create();
-        $concert->addTickets(3);
-
-        $order = $concert->orderTickets('jane@example.com', 3);
-
-        $this->assertEquals('jane@example.com', $order->email);
-        $this->assertEquals(3, $order->tickets()->count());
-    }
-
-
     /**
      * @test
      * @group
