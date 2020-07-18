@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Concert;
+use App\Facades\TicketCode;
+use App\Order;
 use App\Ticket;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -37,6 +39,23 @@ class TicketTest extends TestCase
         $ticket->release();
 
         $this->assertNull($ticket->fresh()->reserved_at);
+
+    }
+
+    /**
+     * @test
+     */
+    public function a_ticket_can_be_claimed_for_an_order()
+    {
+        $order = factory(Order::class)->create();
+        $ticket = factory(Ticket::class)->create(['code' => null]);
+        TicketCode::shouldReceive('generate')->andReturn('TICKETCODE1');
+
+        $ticket->claimFor($order);
+
+//        $this->assertEquals($order->id, $ticket->order_id);  esta forma es valida, pero usamos esta siguiente
+        $this->assertContains($ticket->id, $order->tickets->pluck('id'));
+        $this->assertEquals('TICKETCODE1', $ticket->code);
 
     }
 }
