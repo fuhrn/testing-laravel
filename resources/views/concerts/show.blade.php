@@ -235,7 +235,8 @@
                 var options = {
                     name: document.getElementById('name_on_card').value,
                 }
-                stripe.createToken(card, options).then(function(result) {
+                stripe.createToken(card, options).
+                then(function(result) {
                     if (result.error) {
                         // Inform the user if there was an error
                         var errorElement = document.getElementById('card-errors');
@@ -244,7 +245,7 @@
                         // Send the token to your server
                         stripeTokenHandler(result.token);
                     }
-                });
+                });  //y si ponemos el redirect desde aqui?
             });
             function stripeTokenHandler(token) {
                 // Insert the token ID into the form so it gets submitted to the server

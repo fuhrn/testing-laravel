@@ -33,14 +33,13 @@ class ConcertOrdersController extends Controller
             // Find and reserve     some tickets
             $reservation = $concert->reserveTickets(request('ticket_quantity'), request('email'));
 
-            // Charging the customer for the tickets: refactorizado en ->complete()
-//            $this->paymentGateway->charge($reservation->totalCost(), request('payment_token'));
-
             // Creating the order for those tickets.
             $order = $reservation->complete($this->paymentGateway, request('payment_token'));
 
-//            return response()->json($order, 201);
-            return redirect()->route('order', ['confirmationNumber' =>$order->confirmation_number]);
+//            return response()->json($order, 302);
+//            modifique purchase ticket test para poder hacer redirect y evitar return response
+
+            return redirect()->route('order', ['confirmationNumber' => $order->confirmation_number]);
 
         } catch (PaymentFailedException $e) {
             $reservation->cancel();

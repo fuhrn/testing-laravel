@@ -44,7 +44,7 @@ class PurchaseTicketsTest extends TestCase
     }
 
     /**
-     * @group 1
+     * @group
      * @test
      */
     public function customer_can_purchase_tickets_to_a_published_concert()
@@ -62,17 +62,32 @@ class PurchaseTicketsTest extends TestCase
             'payment_token' => $this->paymentGateway->getValidTestToken(),
         ]);
 
-        $response->assertStatus(201);
+        $response->assertStatus(302);
 
-        $response->assertJson([
+//        cambio este test por assertDatabaseHas pues en la vista no hago return response
+//        $response->assertJson([
+//            'confirmation_number' => 'ORDERCONFIRMATION1234',
+//            'email' => 'john@example.com',
+//            'amount' => 9750,
+//            'tickets' => [
+//                ['code' => 'TICKETCODE1'],
+//                ['code' => 'TICKETCODE2'],
+//                ['code' => 'TICKETCODE3'],
+//            ]
+//        ]);
+
+        $this->assertDatabaseHas('orders', [
             'confirmation_number' => 'ORDERCONFIRMATION1234',
             'email' => 'john@example.com',
             'amount' => 9750,
-            'tickets' => [
-                ['code' => 'TICKETCODE1'],
-                ['code' => 'TICKETCODE2'],
-                ['code' => 'TICKETCODE3'],
-            ]
+        ]);
+        
+//      la tabla ticket tiene integrity violation order_id es obligatorio
+        $this->assertDatabaseHas('tickets', [
+            'order_id' => "1",
+            'code' => 'TICKETCODE1',
+            'code' => 'TICKETCODE2',
+            'code' => 'TICKETCODE3',
         ]);
 
         $this->assertEquals(9750, $this->paymentGateway->totalCharges());
