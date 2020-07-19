@@ -18,7 +18,7 @@ class OrderTest extends TestCase
 
     /**
      * @test
-     * @group 1
+     * @group
      */
     public function creating_order_from_tickets_email_and_charge()
     {

@@ -6,9 +6,11 @@ use App\Billing\PaymentFailedException;
 use App\Billing\PaymentGateway;
 use App\Concert;
 use App\Exceptions\NotEnoughTicketsException;
+use App\Mail\OrderConfirmationEmail;
 use App\Order;
 use App\Reservation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ConcertOrdersController extends Controller
 {
@@ -36,8 +38,10 @@ class ConcertOrdersController extends Controller
             // Creating the order for those tickets.
             $order = $reservation->complete($this->paymentGateway, request('payment_token'));
 
-//            return response()->json($order, 302);
+            Mail::to($order->email)->send(new OrderConfirmationEmail($order));
+
 //            modifique purchase ticket test para poder hacer redirect y evitar return response
+//            return response()->json($order, 302);
 
             return redirect()->route('order', ['confirmationNumber' => $order->confirmation_number]);
 

@@ -7,9 +7,11 @@ use App\Billing\PaymentGateway;
 use App\Concert;
 use App\Facades\OrderConfirmationNumber;
 use App\Facades\TicketCode;
+use App\Mail\OrderConfirmationEmail;
 use App\OrderConfirmationNumberGenerator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Mail;
 use Mockery;
 use Tests\TestCase;
 
@@ -44,12 +46,13 @@ class PurchaseTicketsTest extends TestCase
     }
 
     /**
-     * @group
+     * @group 1
      * @test
      */
     public function customer_can_purchase_tickets_to_a_published_concert()
     {
         $this->withoutExceptionHandling();
+        Mail::fake();
 
         OrderConfirmationNumber::shouldReceive('generate')->andReturn('ORDERCONFIRMATION1234');
         TicketCode::shouldReceive('generateFor')->andReturn('TICKETCODE1', 'TICKETCODE2', 'TICKETCODE3');
@@ -63,7 +66,6 @@ class PurchaseTicketsTest extends TestCase
         ]);
 
         $response->assertStatus(302);
-
 //        cambio este test por assertDatabaseHas pues en la vista no hago return response
 //        $response->assertJson([
 //            'confirmation_number' => 'ORDERCONFIRMATION1234',
@@ -75,13 +77,12 @@ class PurchaseTicketsTest extends TestCase
 //                ['code' => 'TICKETCODE3'],
 //            ]
 //        ]);
-
         $this->assertDatabaseHas('orders', [
             'confirmation_number' => 'ORDERCONFIRMATION1234',
             'email' => 'john@example.com',
             'amount' => 9750,
         ]);
-        
+
 //      la tabla ticket tiene integrity violation order_id es obligatorio
         $this->assertDatabaseHas('tickets', [
             'order_id' => "1",
@@ -92,7 +93,14 @@ class PurchaseTicketsTest extends TestCase
 
         $this->assertEquals(9750, $this->paymentGateway->totalCharges());
         $this->assertTrue($concert->hasOrderFor('john@example.com'));
-        $this->assertEquals(3, $concert->ordersFor('john@example.com')->first()->ticketQuantity());
+
+        $order = $concert->ordersFor('john@example.com')->first();
+        $this->assertEquals(3, $order->ticketQuantity());
+
+        Mail::assertSent(OrderConfirmationEmail::class, function ($mail) use ($order) {
+            return $mail->hasTo('john@example.com')
+                && $mail->order->id === $order->id;
+        });
     }
 
     /**
