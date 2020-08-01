@@ -32,7 +32,7 @@ class PromoterLoginTest extends TestCase
             'password' => 'super-secret-password'
         ]);
 
-        $response->assertRedirect('/backstage/concerts');
+        $response->assertRedirect('/backstage/concerts/new');
 
         $this->assertTrue(Auth::check());
         $this->assertTrue(Auth::user()->is($user));
@@ -61,14 +61,14 @@ class PromoterLoginTest extends TestCase
 
         $response->assertRedirect('/login');
         $response->assertSessionHasErrors('email');
+        $this->assertTrue(session()->hasOldInput('email'));
+        $this->assertFalse(session()->hasOldInput('password'));
         $this->assertFalse(Auth::check());
     }
 
     /**
-     * A basic feature test example.
      * @test
      * @group
-     * @return void
      */
     public function logging_in_with_an_account_that_does_not_exist()
     {
@@ -83,4 +83,19 @@ class PromoterLoginTest extends TestCase
         $response->assertSessionHasErrors('email');
         $this->assertFalse(Auth::check());
     }
+
+    /**
+     * @test
+     * @group
+     */
+    public function logging_out_the_current_user()
+    {
+        Auth::login(factory(User::class)->create());
+
+        $response = $this->post('/logout');
+
+        $response->assertRedirect('/login');
+        $this->assertFalse(Auth::check());
+    }
+
 }

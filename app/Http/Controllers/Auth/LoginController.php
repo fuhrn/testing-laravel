@@ -25,4 +25,10 @@ class LoginController extends Controller
         Auth::attempt(request(['email', 'password']));
         return redirect('/backstage/concerts');
     }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect('/login');
+    }
 }
