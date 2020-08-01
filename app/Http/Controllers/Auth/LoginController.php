@@ -13,6 +13,7 @@ class LoginController extends Controller
     {
         return view('auth.login');
     }
+
     public function login()
     {
 //        Auth::attempt(request(['email', 'password']));

@@ -67,7 +67,7 @@ class PromoterLoginTest extends TestCase
     /**
      * A basic feature test example.
      * @test
-     * @group 1
+     * @group
      * @return void
      */
     public function logging_in_with_an_account_that_does_not_exist()
