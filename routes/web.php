@@ -13,20 +13,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('mockups/order', function() {
-    return view('orders.show');
-});
+//Route::get('mockups/order', function() {
+//    return view('orders.show');
+//});
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+//Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-
 Route::get('/concerts/{id}', 'ConcertsController@show');
-
 Route::post('/concerts/{id}/orders', 'ConcertOrdersController@store');
-
 Route::get('/orders/{confirmationNumber}', 'OrdersController@show')->name('order');
+
+Route::post('/login', 'Auth\LoginController@login');
