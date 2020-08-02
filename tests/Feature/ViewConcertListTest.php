@@ -4,13 +4,26 @@ namespace Tests\Feature;
 
 use App\Concert;
 use App\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Testing\TestResponse;
+use PHPUnit\Framework\Assert;
 use Tests\TestCase;
 
 class ViewConcertListTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp() :void
+    {
+        parent::setUp();
+
+        TestResponse::macro('data', function($key) {
+           return $this->original->getData()[$key];
+        });
+    }
+
     /**
      * @test
      * @group
@@ -31,6 +44,7 @@ class ViewConcertListTest extends TestCase
     {
         $user = factory(User::class)->create();
         $otherUser = factory(User::class)->create();
+
         $concertA = factory(Concert::class)->create(['user_id' => $user->id]);
         $concertB = factory(Concert::class)->create(['user_id' => $user->id]);
         $concertC = factory(Concert::class)->create(['user_id' => $otherUser->id]);
@@ -39,10 +53,11 @@ class ViewConcertListTest extends TestCase
         $response = $this->actingAs($user)->get('/backstage/concerts');
 
         $response->assertStatus(200);
-        $this->assertTrue($response->original->getData()['concerts']->contains($concertA));
-        $this->assertTrue($response->original->getData()['concerts']->contains($concertB));
-        $this->assertTrue($response->original->getData()['concerts']->contains($concertD));
-        $this->assertFalse($response->original->getData()['concerts']->contains($concertC));
+
+        $this->assertTrue($response->data('concerts')->contains($concertA));
+        $this->assertTrue($response->data('concerts')->contains($concertB));
+        $this->assertTrue($response->data('concerts')->contains($concertD));
+        $this->assertFalse($response->data('concerts')->contains($concertC));
 
     }
 }
