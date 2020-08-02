@@ -81,12 +81,6 @@ class AddConcertTest extends TestCase
             $response->assertStatus(302);
             $response->assertRedirect("/concerts/{$concert->id}");
 
-//            $response->assertRedirect('/backstage/concerts');
-
-//            $this->assertTrue($concert->user->is($user));
-
-//            $this->assertFalse($concert->isPublished());
-
             $this->assertEquals('No Warning', $concert->title);
             $this->assertEquals('with Cruel Hand and Backtrack', $concert->subtitle);
             $this->assertEquals("You must be 19 years of age to attend this concert.",
