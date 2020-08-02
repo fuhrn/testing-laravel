@@ -112,21 +112,21 @@ class AddConcertTest extends TestCase
         $this->assertEquals(0, Concert::count());
     }
 
-//    /** @test */
-//    function title_is_required()
-//    {
-//        $user = factory(User::class)->create();
-//
-//        $response = $this->actingAs($user)->from('/backstage/concerts/new')->post('/backstage/concerts',
-//            $this->validParams([
-//                'title' => '',
-//            ]));
-//
-//        $response->assertStatus(302);
-//        $response->assertRedirect('/backstage/concerts/new');
-//        $response->assertSessionHasErrors('title');
-//        $this->assertEquals(0, Concert::count());
-//    }
+    /** @test */
+    function title_is_required()
+    {
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->from('/backstage/concerts/new')->post('/backstage/concerts',
+            $this->validParams([
+                'title' => '',
+            ]));
+
+        $response->assertStatus(302);
+        $response->assertRedirect('/backstage/concerts/new');
+        $response->assertSessionHasErrors('title');
+        $this->assertEquals(0, Concert::count());
+    }
 
 //    /** @test */
 //    function subtitle_is_optional()
