@@ -69,7 +69,7 @@ class ConcertTest extends TestCase
 
     /**
      * @test
-     * @group 1
+     * @group
      */
     public function concerts_can_be_published()
     {
