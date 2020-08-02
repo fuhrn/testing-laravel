@@ -128,25 +128,25 @@ class AddConcertTest extends TestCase
         $this->assertEquals(0, Concert::count());
     }
 
-//    /** @test */
-//    function subtitle_is_optional()
-//    {
-//        $this->withoutExceptionHandling();
-//
-//        $user = factory(User::class)->create();
-//
-//        $response = $this->actingAs($user)->post('/backstage/concerts', $this->validParams([
-//            'subtitle' => '',
-//        ]));
-//
-//        tap(Concert::first(), function ($concert) use ($response, $user) {
+    /** @test */
+    function subtitle_is_optional()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->post('/backstage/concerts', $this->validParams([
+            'subtitle' => '',
+        ]));
+
+        tap(Concert::first(), function ($concert) use ($response, $user) {
 //            $response->assertRedirect('/backstage/concerts');
-//
+
 //            $this->assertTrue($concert->user->is($user));
-//
-//            $this->assertNull($concert->subtitle);
-//        });
-//    }
+
+            $this->assertNull($concert->subtitle);
+        });
+    }
 
 //    /** @test */
 //    function additional_information_is_optional()
