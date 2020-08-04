@@ -30,7 +30,7 @@ class ViewConcertListTest extends TestCase
 
     /**
      * @test
-     * @group 1
+     * @group
      */
     public function promoters_can_only_view_a_list_of_their_own_concerts()
     {

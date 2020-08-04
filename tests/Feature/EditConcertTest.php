@@ -118,7 +118,9 @@ class EditConcertTest extends TestCase
         $response->assertRedirect('/login');
     }
 
-    /** @test */
+    /** @test
+     * @group
+     */
     function promoters_can_edit_their_own_unpublished_concerts()
     {
         $this->withoutExceptionHandling();
@@ -136,9 +138,9 @@ class EditConcertTest extends TestCase
             'state' => 'Old state',
             'zip' => '00000',
             'ticket_price' => 2000,
-            'ticket_quantity' => 5,
+//            'ticket_quantity' => 5,
         ]);
-        $this->assertFalse($concert->isPublished());
+//        $this->assertFalse($concert->isPublished());
 
         $response = $this->actingAs($user)->patch("/backstage/concerts/{$concert->id}", [
             'title' => 'New title',
@@ -152,7 +154,7 @@ class EditConcertTest extends TestCase
             'state' => 'New state',
             'zip' => '99999',
             'ticket_price' => '72.50',
-            'ticket_quantity' => '10',
+//            'ticket_quantity' => '10',
         ]);
 
         $response->assertRedirect("/backstage/concerts");
@@ -167,11 +169,13 @@ class EditConcertTest extends TestCase
             $this->assertEquals('New state', $concert->state);
             $this->assertEquals('99999', $concert->zip);
             $this->assertEquals(7250, $concert->ticket_price);
-            $this->assertEquals(10, $concert->ticket_quantity);
+//            $this->assertEquals(10, $concert->ticket_quantity);
         });
     }
 
-    /** @test */
+    /** @test
+     *  @group 1
+     */
     function promoters_cannot_edit_other_unpublished_concerts()
     {
         $user = factory(User::class)->create();
