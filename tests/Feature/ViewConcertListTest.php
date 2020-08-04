@@ -15,14 +15,6 @@ class ViewConcertListTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function setUp() :void
-    {
-        parent::setUp();
-
-        TestResponse::macro('data', function($key) {
-           return $this->original->getData()[$key];
-        });
-    }
 
     /**
      * @test
@@ -38,7 +30,7 @@ class ViewConcertListTest extends TestCase
 
     /**
      * @test
-     * @group
+     * @group 1
      */
     public function promoters_can_only_view_a_list_of_their_own_concerts()
     {
@@ -54,10 +46,14 @@ class ViewConcertListTest extends TestCase
 
         $response->assertStatus(200);
 
-        $this->assertTrue($response->data('concerts')->contains($concertA));
-        $this->assertTrue($response->data('concerts')->contains($concertB));
-        $this->assertTrue($response->data('concerts')->contains($concertD));
-        $this->assertFalse($response->data('concerts')->contains($concertC));
+//        $this->assertTrue($response->data('concerts')->contains($concertA));
+//        $this->assertTrue($response->data('concerts')->contains($concertB));
+//        $this->assertTrue($response->data('concerts')->contains($concertD));
+//        $this->assertFalse($response->data('concerts')->contains($concertC));
+        $response->data('concerts')->assertContains($concertA);
+        $response->data('concerts')->assertContains($concertB);
+        $response->data('concerts')->assertContains($concertD);
+        $response->data('concerts')->assertNotContains($concertC);
 
     }
 }
