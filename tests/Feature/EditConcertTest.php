@@ -44,7 +44,7 @@ class EditConcertTest extends TestCase
             'state' => 'New state',
             'zip' => '99999',
             'ticket_price' => '72.50',
-            'ticket_quantity' => '10',
+//            'ticket_quantity' => '10',
         ], $overrides);
     }
 
