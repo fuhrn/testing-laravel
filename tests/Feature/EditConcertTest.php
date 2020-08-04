@@ -174,7 +174,7 @@ class EditConcertTest extends TestCase
     }
 
     /** @test
-     *  @group 1
+     *  @group
      */
     function promoters_cannot_edit_other_unpublished_concerts()
     {
