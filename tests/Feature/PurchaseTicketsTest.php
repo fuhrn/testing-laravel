@@ -57,7 +57,7 @@ class PurchaseTicketsTest extends TestCase
         OrderConfirmationNumber::shouldReceive('generate')->andReturn('ORDERCONFIRMATION1234');
         TicketCode::shouldReceive('generateFor')->andReturn('TICKETCODE1', 'TICKETCODE2', 'TICKETCODE3');
 
-        $concert = factory(Concert::class)->states('published')->create(['ticket_price' => 3250])->addTickets(3);
+        $concert = \ConcertFactoryHelper::createPublished(['ticket_price' => 3250, 'ticket_quantity' => 3]);
 
         $response = $this->orderTickets($concert, [
             'email' => 'john@example.com',
@@ -66,17 +66,7 @@ class PurchaseTicketsTest extends TestCase
         ]);
 
         $response->assertStatus(302);
-//        cambio este test por assertDatabaseHas pues en la vista no hago return response
-//        $response->assertJson([
-//            'confirmation_number' => 'ORDERCONFIRMATION1234',
-//            'email' => 'john@example.com',
-//            'amount' => 9750,
-//            'tickets' => [
-//                ['code' => 'TICKETCODE1'],
-//                ['code' => 'TICKETCODE2'],
-//                ['code' => 'TICKETCODE3'],
-//            ]
-//        ]);
+
         $this->assertDatabaseHas('orders', [
             'confirmation_number' => 'ORDERCONFIRMATION1234',
             'email' => 'john@example.com',

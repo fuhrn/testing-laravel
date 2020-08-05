@@ -7,6 +7,8 @@ use Carbon\Carbon;
 use Faker\Generator as Faker;
 use App\User;
 
+
+
 $factory->define(Concert::class, function (Faker $faker) {
     return [
         'user_id' => function () {
