@@ -55,7 +55,9 @@ class AddConcertTest extends TestCase
         $response->assertRedirect('/login');
     }
 
-    /** @test */
+    /** @test
+     * @group
+     */
     function adding_a_valid_concert()
     {
         $this->withoutExceptionHandling();
@@ -83,7 +85,7 @@ class AddConcertTest extends TestCase
 
             $this->assertTrue($concert->user->is($user));
 
-            $this->assertTrue($concert->isPublished());
+            $this->assertFalse($concert->isPublished());
 
             $this->assertEquals('No Warning', $concert->title);
             $this->assertEquals('with Cruel Hand and Backtrack', $concert->subtitle);
@@ -97,7 +99,7 @@ class AddConcertTest extends TestCase
             $this->assertEquals('12345', $concert->zip);
             $this->assertEquals(3250, $concert->ticket_price);
             $this->assertEquals(75, $concert->ticket_quantity);
-            $this->assertEquals(75, $concert->ticketsRemaining());
+            $this->assertEquals(0, $concert->ticketsRemaining());
         });
     }
 
