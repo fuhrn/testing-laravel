@@ -102,7 +102,7 @@ class ConcertTest extends TestCase
 
     /**
      * @test
-     * @group 1
+     * @group
      */
     public function tickets_remaining_does_not_include_tickets_associated_with_an_order()
     {
@@ -120,10 +120,37 @@ class ConcertTest extends TestCase
     public function tickets_sold_only_includes_tickets_associated_with_an_order()
     {
         $concert = factory(Concert::class)->create();
-        $concert->tickets()->saveMany(factory(Ticket::class, 30)->create(['order_id' => 1]));
-        $concert->tickets()->saveMany(factory(Ticket::class, 20)->create(['order_id' => null]));
+        $concert->tickets()->saveMany(factory(Ticket::class, 3)->create(['order_id' => 1]));
+        $concert->tickets()->saveMany(factory(Ticket::class, 2)->create(['order_id' => null]));
 
-        $this->assertEquals(20, $concert->ticketsRemaining());
+        $this->assertEquals(2, $concert->ticketsRemaining());
+
+    }
+
+    /**
+     * @test
+     * @group
+     */
+    public function total_tickets_includes_all_tickets()
+    {
+        $concert = factory(Concert::class)->create();
+        $concert->tickets()->saveMany(factory(Ticket::class, 3)->create(['order_id' => 1]));
+        $concert->tickets()->saveMany(factory(Ticket::class, 2)->create(['order_id' => null]));
+
+        $this->assertEquals(5, $concert->totalTickets());
+
+    }
+    /**
+     * @test
+     * @group 1
+     */
+    public function calculating_the_percentage_of_tickets_sold()
+    {
+        $concert = factory(Concert::class)->create();
+        $concert->tickets()->saveMany(factory(Ticket::class, 2)->create(['order_id' => 1]));
+        $concert->tickets()->saveMany(factory(Ticket::class, 5)->create(['order_id' => null]));
+
+        $this->assertEquals(28.57, $concert->percentSoldOut());
 
     }
 
