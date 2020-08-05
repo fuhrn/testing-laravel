@@ -32,10 +32,10 @@
                                             {{ $concert->formatted_date }} @ {{ $concert->formatted_start_time }}
                                         </p>
                                     </div>
-                                    <div>
-                                        <a href="{{ route('backstage.published-concert-orders.index', $concert) }}" class="btn btn-sm btn-secondary m-xs-r-2">Manage</a>
-                                        <a href="{{ route('concerts.show', $concert) }}" class="link-brand text-sm wt-medium">Public Link</a>
-                                    </div>
+{{--                                    <div>--}}
+{{--                                        <a href="{{ route('backstage.published-concert-orders.index', $concert) }}" class="btn btn-sm btn-secondary m-xs-r-2">Manage</a>--}}
+{{--                                        <a href="{{ route('concerts.show', $concert) }}" class="link-brand text-sm wt-medium">Public Link</a>--}}
+{{--                                    </div>--}}
                                 </div>
                             </div>
                         </div>

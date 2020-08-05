@@ -10,4 +10,9 @@ class ConcertFactoryHelper
         $concert->publish();
         return $concert;
     }
+
+    public static function createUnPublished($overrides = [])
+    {
+        return factory(Concert::class)->states('unpublished')->create($overrides);
+    }
 }
