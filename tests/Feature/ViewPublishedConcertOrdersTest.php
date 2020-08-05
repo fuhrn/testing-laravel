@@ -3,7 +3,7 @@
 namespace Tests\Features;
 
 use App\User;
-use OrderFactory;
+use OrderFactoryHelper;
 use Carbon\Carbon;
 use ConcertFactoryHelper;
 use Tests\TestCase;
@@ -15,12 +15,17 @@ class ViewPublishedConcertOrdersTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    /** @test
+     * @group 1
+     */
     function a_promoter_can_view_the_orders_of_their_own_published_concert()
     {
         $this->withoutExceptionHandling();
         $user = factory(User::class)->create();
         $concert = ConcertFactoryHelper::createPublished(['user_id' => $user->id]);
+
+        $order = \OrderFactoryHelper::createForConcert($concert, ['created_at' => carbon::parse('11 days ago')], 2);
+        dd($order);
 
         $response = $this->actingAs($user)->get("/backstage/published-concerts/{$concert->id}/orders");
 

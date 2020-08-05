@@ -157,7 +157,7 @@ class ConcertTest extends TestCase
 
     /**
      * @test
-     * @group 1
+     * @group
      */
     public function calculating_the_revenue_in_dollars()
     {
