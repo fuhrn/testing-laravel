@@ -63,7 +63,7 @@ class Concert extends Model
 
     public function orders()
     {
-        return $this->belongsToMany(Order::class, 'tickets');
+        return Order::whereIn('id', $this->tickets()->pluck('order_id'));
     }
 
     public function tickets()
@@ -99,6 +99,10 @@ class Concert extends Model
         return number_format(($this->ticketsSold() / $this->totalTickets()) * 100, 2);
     }
 
+    public function revenueInDollars()
+    {
+        return $this->orders()->sum('amount') / 100;
+    }
     public function reserveTickets($quantity, $email)
     {
 
