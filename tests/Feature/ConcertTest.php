@@ -102,15 +102,29 @@ class ConcertTest extends TestCase
 
     /**
      * @test
-     * @group
+     * @group 1
      */
     public function tickets_remaining_does_not_include_tickets_associated_with_an_order()
+    {
+        $concert = factory(Concert::class)->create();
+        $concert->tickets()->saveMany(factory(Ticket::class, 3)->create(['order_id' => 1]));
+        $concert->tickets()->saveMany(factory(Ticket::class, 2)->create(['order_id' => null]));
+
+        $this->assertEquals(3, $concert->ticketsSold());
+    }
+
+    /**
+     * @test
+     * @group
+     */
+    public function tickets_sold_only_includes_tickets_associated_with_an_order()
     {
         $concert = factory(Concert::class)->create();
         $concert->tickets()->saveMany(factory(Ticket::class, 30)->create(['order_id' => 1]));
         $concert->tickets()->saveMany(factory(Ticket::class, 20)->create(['order_id' => null]));
 
         $this->assertEquals(20, $concert->ticketsRemaining());
+
     }
 
     /**
