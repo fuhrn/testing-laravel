@@ -59,7 +59,7 @@ class MessageAtendeesTest extends TestCase
     }
 
     /** @test
-     * @group 1
+     * @group
      */
     function a_promoter_can_send_a_new_message()
     {
