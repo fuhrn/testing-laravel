@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\AttendeeMessage;
+use App\Jobs\SendAttendeeMessage;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -11,6 +12,9 @@ use Tests\TestCase;
 
 class MessageAtendeesTest extends TestCase
 {
+
+    use RefreshDatabase;
+
     /**
      * @test
      * @return void
@@ -61,7 +65,7 @@ class MessageAtendeesTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-//        Queue::fake();
+        Queue::fake();
         $user = factory(User::class)->create();
         $concert = \ConcertFactoryHelper::createPublished([
             'user_id' => $user->id,
@@ -80,9 +84,9 @@ class MessageAtendeesTest extends TestCase
         $this->assertEquals('My subject', $message->subject);
         $this->assertEquals('My message', $message->message);
 
-//        Queue::assertPushed(SendAttendeeMessage::class, function ($job) use ($message) {
-//            return $job->attendeeMessage->is($message);
-//        });
+        Queue::assertPushed(SendAttendeeMessage::class, function ($job) use ($message) {
+            return $job->attendeeMessage->is($message);
+        });
     }
 
     /** @test */
