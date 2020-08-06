@@ -32,7 +32,7 @@ class ViewPublishedConcertOrdersTest extends TestCase
     }
 
     /** @test
-     * @group 
+     * @group
      */
     function a_promoter_can_view_the_10_most_recent_orders_for_their_concert()
     {
