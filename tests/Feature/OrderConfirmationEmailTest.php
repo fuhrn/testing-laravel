@@ -30,7 +30,6 @@ class OrderConfirmationEmailTest extends TestCase
      */
     public function email_has_a_subject()
     {
-
         $order = factory(Order::class)->make();
         $email = new OrderConfirmationEmail($order);
         $this->assertEquals("Your TicketBeast Order", $email->build()->subject);
