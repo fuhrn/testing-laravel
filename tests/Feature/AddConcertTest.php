@@ -501,7 +501,7 @@ class AddConcertTest extends TestCase
     }
 
     /** @test
-     * @group 1
+     * @group
      */
     function an_event_is_fired_when_a_concert_is_added()
     {

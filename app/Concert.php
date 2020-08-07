@@ -108,9 +108,9 @@ class Concert extends Model
     {
         return $this->orders()->sum('amount') / 100;
     }
+
     public function reserveTickets($quantity, $email)
     {
-
         $tickets =  $this->findTickets($quantity)->each(function ($ticket) {
             $ticket->reserve();
         });
@@ -128,5 +128,9 @@ class Concert extends Model
         }
         return $tickets;
     }
-
+    
+    public function hasPoster()
+    {
+        return $this->poster_image_path !== null;
+    }
 }
