@@ -4,6 +4,9 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\Testing\File;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 use App\User;
 use Carbon\Carbon;
@@ -394,29 +397,31 @@ class AddConcertTest extends TestCase
         $this->assertEquals(0, Concert::count());
     }
 
-//    /** @test */
-//    function poster_image_is_uploaded_if_included()
-//    {
-//        $this->withoutExceptionHandling();
-//
-//        Event::fake([ConcertAdded::class]);
-//        Storage::fake('public');
-//        $user = factory(User::class)->create();
-//        $file = File::image('concert-poster.png', 850, 1100);
-//
-//        $response = $this->actingAs($user)->post('/backstage/concerts', $this->validParams([
-//            'poster_image' => $file,
-//        ]));
-//
-//        tap(Concert::first(), function ($concert) use ($file) {
-//            $this->assertNotNull($concert->poster_image_path);
-//            Storage::disk('public')->assertExists($concert->poster_image_path);
-//            $this->assertFileEquals(
-//                $file->getPathname(),
-//                Storage::disk('public')->path($concert->poster_image_path)
-//            );
-//        });
-//    }
+    /** @test
+     * @group
+     */
+    function poster_image_is_uploaded_if_included()
+    {
+        $this->withoutExceptionHandling();
+
+        Event::fake([ConcertAdded::class]);
+        Storage::fake('public');
+        $user = factory(User::class)->create();
+        $file = File::image('concert-poster.png', 850, 1100);
+
+        $response = $this->actingAs($user)->post('/backstage/concerts', $this->validParams([
+            'poster_image' => $file,
+        ]));
+
+        tap(Concert::first(), function ($concert) use ($file) {
+            $this->assertNotNull($concert->poster_image_path);
+            Storage::disk('public')->assertExists($concert->poster_image_path);
+            $this->assertFileEquals(
+                $file->getPathname(),
+                Storage::disk('public')->path($concert->poster_image_path)
+            );
+        });
+    }
 //
 //    /** @test */
 //    function poster_image_must_be_an_image()
