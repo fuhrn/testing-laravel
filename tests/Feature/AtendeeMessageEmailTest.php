@@ -12,7 +12,7 @@ use Tests\TestCase;
 class AttendeeMessageEmailTest extends TestCase
 {
     /** @test
-     * @group 1
+     * @group
      */
     function email_has_the_correct_subject_and_message()
     {

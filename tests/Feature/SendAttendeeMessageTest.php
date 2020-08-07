@@ -19,7 +19,7 @@ class SendAttendeeMessageTest extends TestCase
     use RefreshDatabase;
 
     /** @test
-     * @group 1
+     * @group
      */
     function it_sends_the_message_to_all_concert_attendees()
     {
