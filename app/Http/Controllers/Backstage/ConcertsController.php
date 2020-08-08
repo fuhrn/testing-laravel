@@ -57,7 +57,7 @@ class ConcertsController extends Controller
             'zip' => request('zip'),
             'additional_information' => request('additional_information'),
             'ticket_quantity' => (int) request('ticket_quantity'),
-            'poster_image_path' => request('poster_image', new NullFile)->store('posters', 'public'),
+            'poster_image_path' => request('poster_image', new NullFile())->store('posters', 'public'),
         ]);
 
         ConcertAdded::dispatch($concert);

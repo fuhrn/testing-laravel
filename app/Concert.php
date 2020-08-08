@@ -128,7 +128,7 @@ class Concert extends Model
         }
         return $tickets;
     }
-    
+
     public function hasPoster()
     {
         return $this->poster_image_path !== null;

@@ -12,7 +12,9 @@ use Illuminate\Queue\SerializesModels;
 
 class ConcertAdded
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     public $concert;
 

@@ -31,7 +31,7 @@ class SchedulePosterImageProcessingTest extends TestCase
     }
 
     /** @test
-     * @group 1
+     * @group
      */
     function a_job_is_not_queued_if_a_poster_is_not_present()
     {
