@@ -95,7 +95,7 @@ class MessageAtendeesTest extends TestCase
         Queue::fake();
         $user = factory(User::class)->create();
         $otherUser = factory(User::class)->create();
-        $concert = ConcertFactory::createPublished([
+        $concert = \ConcertFactoryHelper::createPublished([
             'user_id' => $otherUser->id,
         ]);
 
@@ -113,7 +113,7 @@ class MessageAtendeesTest extends TestCase
     function a_guest_cannot_send_a_new_message_for_any_concerts()
     {
         Queue::fake();
-        $concert = ConcertFactory::createPublished();
+        $concert = \ConcertFactoryHelper::createPublished();
 
         $response = $this->post("/backstage/concerts/{$concert->id}/messages", [
             'subject' => 'My subject',
@@ -130,7 +130,7 @@ class MessageAtendeesTest extends TestCase
     {
         Queue::fake();
         $user = factory(User::class)->create();
-        $concert = ConcertFactory::createPublished([
+        $concert = \ConcertFactoryHelper::createPublished([
             'user_id' => $user->id,
         ]);
 
@@ -153,7 +153,7 @@ class MessageAtendeesTest extends TestCase
     {
         Queue::fake();
         $user = factory(User::class)->create();
-        $concert = ConcertFactory::createPublished([
+        $concert = \ConcertFactoryHelper::createPublished([
             'user_id' => $user->id,
         ]);
 

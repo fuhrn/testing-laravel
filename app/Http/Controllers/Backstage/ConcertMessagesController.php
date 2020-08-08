@@ -13,7 +13,7 @@ class ConcertMessagesController extends Controller
     {
         $concert = Auth::user()->concerts()->findOrFail($id);
 
-        return view('backstage.concert-messages.new');
+        return view('backstage.concert-messages.new', ['concert' => $concert]);
     }
 
 
