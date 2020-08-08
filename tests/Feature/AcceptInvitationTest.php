@@ -170,7 +170,7 @@ class AcceptInvitationTest extends TestCase
     }
 
     /** @test
-     * @group 
+     * @group
      */
     function email_must_be_unique()
     {
@@ -197,7 +197,7 @@ class AcceptInvitationTest extends TestCase
     }
 
     /** @test
-     * @group 1
+     * @group
      */
     function password_is_required()
     {
