@@ -14,14 +14,14 @@ class AcceptInvitationTest extends TestCase
     use RefreshDatabase;
 
     /** @test
-     * @group 1
+     * @group
      */
     function viewing_an_unused_invitation()
     {
         $this->withoutExceptionHandling();
 
         $invitation = factory(Invitation::class)->create([
-//            'user_id' => null,
+            'user_id' => null,
             'code' => 'TESTCODE1234',
         ]);
 
@@ -32,7 +32,9 @@ class AcceptInvitationTest extends TestCase
         $this->assertTrue($response->data('invitation')->is($invitation));
     }
 
-    /** @test */
+    /** @test
+     * @group
+     */
     function viewing_a_used_invitation()
     {
         $invitation = factory(Invitation::class)->create([
@@ -45,7 +47,9 @@ class AcceptInvitationTest extends TestCase
         $response->assertStatus(404);
     }
 
-    /** @test */
+    /** @test
+     * @group 1
+     */
     function viewing_an_invitation_that_does_not_exist()
     {
         $response = $this->get('/invitations/TESTCODE1234');

@@ -38,7 +38,7 @@ class ProcessPosterImageTest extends TestCase
     }
 
     /** @test
-     * @group 
+     * @group
      */
     function it_optimizes_the_poster_image()
     {
