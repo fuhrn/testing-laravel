@@ -48,7 +48,7 @@ class AcceptInvitationTest extends TestCase
     }
 
     /** @test
-     * @group 1
+     * @group
      */
     function viewing_an_invitation_that_does_not_exist()
     {
@@ -57,7 +57,9 @@ class AcceptInvitationTest extends TestCase
         $response->assertStatus(404);
     }
 
-    /** @test */
+    /** @test
+     * @group 1
+     */
     function registering_with_a_valid_invitation_code()
     {
         $this->withoutExceptionHandling();
@@ -68,6 +70,7 @@ class AcceptInvitationTest extends TestCase
         ]);
 
         $response = $this->post('/register', [
+            'name' => 'john',
             'email' => 'john@example.com',
             'password' => 'secret',
             'invitation_code' => 'TESTCODE1234',
