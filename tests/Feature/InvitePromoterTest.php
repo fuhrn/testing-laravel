@@ -30,9 +30,9 @@ class InvitePromoterTest extends TestCase
         $this->assertEquals('john@example.com', $invitation->email);
         $this->assertEquals('TESTCODE1234', $invitation->code);
 
-//        Mail::assertSent(InvitationEmail::class, function ($mail) use ($invitation) {
-//            return $mail->hasTo('john@example.com')
-//                && $mail->invitation->is($invitation);
-//        });
+        Mail::assertSent(InvitationEmail::class, function ($mail) use ($invitation) {
+            return $mail->hasTo('john@example.com')
+                && $mail->invitation->is($invitation);
+        });
     }
 }
