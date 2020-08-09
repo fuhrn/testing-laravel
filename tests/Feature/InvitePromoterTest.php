@@ -16,7 +16,7 @@ class InvitePromoterTest extends TestCase
 
     /**
      * @test
-     * @group 1
+     * @group
      */
     function inviting_a_promoter_via_the_cli()
     {
